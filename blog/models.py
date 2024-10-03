@@ -3,6 +3,7 @@ from django.db import models
 
 class CustomUser(models.Model):
     username = models.CharField(max_length=255, unique=True)
+    about = models.TextField(blank=True)
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=128)
 

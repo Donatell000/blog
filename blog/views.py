@@ -1,13 +1,13 @@
-from django.http import HttpResponse
 from rest_framework import generics
-from .serializers import CustomUserSerializer
+from .serializers import CustomUserSerializer, PostSerializer
 from .models import CustomUser, Post
 
 
-def message_welcome(request):
-    return HttpResponse("Делитесь своими мыслями!")
-
-
-class CustomUserApiView(generics.ListAPIView):
+class CustomUserAPIView(generics.ListAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
+
+
+class PostAPIView(generics.ListAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer

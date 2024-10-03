@@ -1,8 +1,7 @@
 from django.urls import path
-from .views import CustomUserApiView
-from .views import message_welcome
+from .views import CustomUserAPIView, PostAPIView
 
 urlpatterns = [
-    path('', message_welcome),
-    path('userlist/', CustomUserApiView.as_view())
+    path('userlist/', CustomUserAPIView.as_view()),
+    path('userlist/posts', PostAPIView.as_view()),
 ]
