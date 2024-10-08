@@ -7,8 +7,8 @@ class CustomUser(models.Model):
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=128)
 
-    def __str__(self):
-        return self.username
+    # def __str__(self):
+    #     return self.username
 
 
 class Post(models.Model):
@@ -18,6 +18,6 @@ class Post(models.Model):
     time_update = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
-    def __str__(self):
-        return self.title
+    # def __str__(self):
+    #     return self.title
 
