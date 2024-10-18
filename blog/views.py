@@ -12,6 +12,15 @@ class PostAPIList(generics.ListCreateAPIView):
     serializer_class = PostSerializer
 
 
+class PostAPIListUsername(generics.ListAPIView):
+    serializer_class = PostSerializer
+    permission_classes = (IsOwnerOrReadOnly,)
+
+    def get_queryset(self):
+        username = self.kwargs['username']
+        return Post.objects.filter(user__username=username)
+
+
 class PostAPIUpdate(generics.RetrieveUpdateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
@@ -33,6 +42,6 @@ class ProfileAPIList(generics.ListAPIView):
 class ProfileAPIDetail(generics.RetrieveAPIView):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
-    lookup_field = 'user_id'
-    permission_classes = (IsAuthenticated, )
-    authentication_classes = (JWTAuthentication,)
+    lookup_field = 'user__username'
+    # permission_classes = (IsAuthenticated, )
+    # authentication_classes = (JWTAuthentication,)
