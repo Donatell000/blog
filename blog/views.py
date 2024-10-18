@@ -1,14 +1,15 @@
 from rest_framework import generics
-from .permissions import IsOwnerOrReadOnly
-from .serializers import PostSerializer
-from .models import Post
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
+from .permissions import IsOwnerOrReadOnly, IsAuthorOnly
+from .serializers import PostSerializer, ProfileSerializer
+from .models import Post, Profile
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated, AllowAny
 
 
 class PostAPIList(generics.ListCreateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    permission_classes = (IsAuthenticatedOrReadOnly,)
 
 
 class PostAPIUpdate(generics.RetrieveUpdateAPIView):
@@ -20,8 +21,18 @@ class PostAPIUpdate(generics.RetrieveUpdateAPIView):
 class PostAPIDestroy(generics.DestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    permission_classes = (IsOwnerOrReadOnly,)
+    permission_classes = (IsAuthorOnly, )
+    authentication_classes = (JWTAuthentication,)
 
-# class PostViewSet(viewsets.ModelViewSet):
-#     queryset = Post.objects.all()
-#     serializer_class = PostSerializer
+
+class ProfileAPIList(generics.ListAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+
+
+class ProfileAPIDetail(generics.RetrieveAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    lookup_field = 'user_id'
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (JWTAuthentication,)
