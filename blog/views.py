@@ -2,8 +2,8 @@ from rest_framework import generics
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from .permissions import IsOwnerOrReadOnly, IsAuthorOnly
-from .serializers import PostSerializer, ProfileSerializer
-from .models import Post, Profile
+from .serializers import PostSerializer, ProfileSerializer, CommentSerializer
+from .models import Post, Profile, Comment
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated, AllowAny
 
 
@@ -45,3 +45,13 @@ class ProfileAPIDetail(generics.RetrieveAPIView):
     lookup_field = 'user__username'
     # permission_classes = (IsAuthenticated, )
     # authentication_classes = (JWTAuthentication,)
+
+
+class CommentAPIList(generics.ListAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+
+class CommentAPIDetail(generics.RetrieveAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = CommentSerializer

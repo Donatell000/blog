@@ -7,6 +7,9 @@ class Profile(models.Model):
     description = models.TextField(blank=True)
     age = models.IntegerField(null=True, blank=True)
 
+    def __str__(self):
+        return self.user.username
+
 
 class Post(models.Model):
     title = models.CharField(max_length=255)
@@ -15,9 +18,15 @@ class Post(models.Model):
     time_update = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f" автор - {self.user.username}, заголовок - {self.title}, время создания - {self.time_create}"
+
 
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField()
     time_create = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f" автор - {self.user.username}, пост_id - {self.post_id}, время создания - {self.time_create}"
