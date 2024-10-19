@@ -23,4 +23,4 @@ class ProfileSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
-        fields = 'all'
+        fields = '__all__'

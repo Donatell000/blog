@@ -2,7 +2,7 @@ from django.urls import path, include
 from django.contrib import admin
 from rest_framework import routers
 from .views import PostAPIList, PostAPIDestroy,\
-    ProfileAPIList, ProfileAPIDetail, PostAPIListUsername, CommentAPIList, CommentAPIDetail
+    ProfileAPIList, ProfileAPIDetail, PostAPIListUsername, CommentAPIList, CommentAPIDetail, CommentAPIDetailComm
 from django.contrib import admin
 
 # router = routers.SimpleRouter()
@@ -17,5 +17,6 @@ urlpatterns = [
     path('api/profile/', ProfileAPIList.as_view()),
     path('api/profile/<str:user__username>/', ProfileAPIDetail.as_view()),
     path('api/comments/', CommentAPIList.as_view()),
-    path('api/comments/<int:pk>', CommentAPIDetail.as_view()),
+    path('api/comments_id/<int:pk>/', CommentAPIDetailComm.as_view()),
+    path('api/comments_post/<int:post_id>/', CommentAPIDetail.as_view()),
 ]

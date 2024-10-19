@@ -52,6 +52,14 @@ class CommentAPIList(generics.ListAPIView):
     serializer_class = CommentSerializer
 
 
-class CommentAPIDetail(generics.RetrieveAPIView):
-    queryset = Profile.objects.all()
+class CommentAPIDetail(generics.ListAPIView):
+    queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+    lookup_field = 'post_id'
+
+
+class CommentAPIDetailComm(generics.RetrieveUpdateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = (IsAuthorOnly,)
+    authentication_classes = (JWTAuthentication,)
