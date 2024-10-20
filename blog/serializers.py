@@ -4,11 +4,11 @@ from .models import Post, Profile, Comment
 
 
 class PostSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(source='user.username')
+    username = serializers.CharField(source='user.username', read_only=True)
 
     class Meta:
         model = Post
-        fields = '__all__'  # ('title', 'content', 'author')
+        fields = ('id', 'username', 'title', 'content', 'time_create', 'time_update')
 
 
 class ProfileSerializer(serializers.ModelSerializer):
