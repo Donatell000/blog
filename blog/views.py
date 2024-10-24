@@ -1,10 +1,26 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, viewsets
 from rest_framework_simplejwt.authentication import JWTAuthentication
-
-from .permissions import IsOwnerOrReadOnly, IsAuthorOnly
+from .filters import PostFilter, ProfileFilter
+from .permissions import IsAuthorOnly
 from .serializers import PostSerializer, ProfileSerializer, CommentSerializer
 from .models import Post, Profile, Comment
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny
+
+
+class ProfileViewSet(viewsets.ModelViewSet):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+    authentication_classes = (JWTAuthentication,)
+    filter_backends = (DjangoFilterBackend, )
+    filterset_class = ProfileFilter
+    http_method_names = ['get', 'put', 'patch', 'delete']
+
+    def get_permissions(self):
+        if self.request.method == 'GET':
+            return [AllowAny()]
+        return [IsAuthenticated(), IsAuthorOnly()]
+
 
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -12,6 +28,8 @@ class PostViewSet(viewsets.ModelViewSet):
     serializer_class = PostSerializer
     authentication_classes = (JWTAuthentication, )
     http_method_names = ['get', 'post', 'put', 'patch', 'delete']
+    filter_backends = (DjangoFilterBackend, )
+    filterset_class = PostFilter
 
     def get_permissions(self):
         if self.request.method == 'GET':
@@ -21,46 +39,7 @@ class PostViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
-# class PostAPIList(generics.ListCreateAPIView):
-#     queryset = Post.objects.all()
-#     serializer_class = PostSerializer
-#
-#
-# class PostAPIListUsername(generics.ListAPIView):
-#     serializer_class = PostSerializer
-#     permission_classes = (IsOwnerOrReadOnly,)
-#
-#     def get_queryset(self):
-#         username = self.kwargs['username']
-#         return Post.objects.filter(user__username=username)
-#
-#
-# class PostAPIUpdate(generics.RetrieveUpdateAPIView):
-#     queryset = Post.objects.all()
-#     serializer_class = PostSerializer
-#     permission_classes = (IsOwnerOrReadOnly,)
-#
-#
-# class PostAPIDestroy(generics.DestroyAPIView):
-#     queryset = Post.objects.all()
-#     serializer_class = PostSerializer
-#     permission_classes = (IsAuthorOnly, )
-#     authentication_classes = (JWTAuthentication,)
-#
-#
-# class ProfileAPIList(generics.ListAPIView):
-#     queryset = Profile.objects.all()
-#     serializer_class = ProfileSerializer
-#
-#
-# class ProfileAPIDetail(generics.RetrieveAPIView):
-#     queryset = Profile.objects.all()
-#     serializer_class = ProfileSerializer
-#     lookup_field = 'user__username'
-#     # permission_classes = (IsAuthenticated, )
-#     # authentication_classes = (JWTAuthentication,)
-#
-#
+
 # class CommentAPIList(generics.ListAPIView):
 #     queryset = Comment.objects.all()
 #     serializer_class = CommentSerializer
